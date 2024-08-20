@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, NonNullableFormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { FormUtilsService } from '../../shared/form/form-utils.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UsersService } from '../services/users.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup-form',
@@ -23,6 +25,8 @@ export class SignupFormComponent implements OnInit {
     private readonly formBuilder: NonNullableFormBuilder,
     protected readonly formUtilsService: FormUtilsService,
     private readonly snack: MatSnackBar,
+    private readonly usersService: UsersService,
+    private readonly router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -35,9 +39,27 @@ export class SignupFormComponent implements OnInit {
     const password = this.form.value.password
     const passwordConfirmation = this.form.value.passwordConfirmation
 
-    if(password !== passwordConfirmation) {
+    if (password !== passwordConfirmation) {
       this.snack.open('Senha está diferente da confirmação de senha.');
-      this.input.nativeElement.focus  ();
+      this.input.nativeElement.focus();
+    } else {
+      this.usersService.signup({
+        firstname: this.form.value.firstname,
+        lastname: this.form.value.lastname,
+        dateOfBirth: this.form.value.dateOfBirth,
+        email: this.form.value.email,
+        password: this.form.value.password,
+        passwordConfirmation: this.form.value.passwordConfirmation,
+      })
+        .subscribe({
+          next: () => {
+            this.snack.open("Cadastrado com sucesso!");
+            this.onClickMoveToSignin();
+          },
+          error: err => {
+            this.snack.open(err.error.message)
+          }
+        })
     }
   }
 
@@ -46,6 +68,10 @@ export class SignupFormComponent implements OnInit {
   }
   togglePasswordHidden() {
     this.passwordHidden = !this.passwordHidden;
+  }
+
+  onClickMoveToSignin() {
+    this.router.navigate(['/users/signin'])
   }
 
   private initTitle() {

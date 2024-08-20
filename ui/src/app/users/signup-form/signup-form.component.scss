@@ -12,17 +12,6 @@ mat-toolbar {
   align-items: flex-start;
 }
 
-.lissons-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-
-  &__button {
-    margin-left: 1.5rem;
-  }
-}
-
 mat-card-subtitle {
   color: gainsboro;
 }
@@ -40,8 +29,4 @@ mat-card-actions {
 
 mat-form-field {
   padding-bottom: 0.65rem;
-}
-
-.full-width {
-  width: 100%;
 }

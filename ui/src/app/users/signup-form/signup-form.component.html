@@ -84,8 +84,9 @@
     <mat-card-actions>
       <button mat-raised-button color="primary" matTooltip="'Enter' para logar"
         (click)="onClickSignup()">Cadastrar</button>
-      <button mat-stroked-button style="margin-left: 1.05rem;" matTooltip="'ESC' para cancelar">Já tenho
-        conta...</button>
+      <button mat-stroked-button style="margin-left: 1.05rem;" matTooltip="'ESC' para cancelar" (click)="onClickMoveToSignin()">
+        Já tenho uma conta...
+      </button>
     </mat-card-actions>
   </mat-card>
 </div>

@@ -16,14 +16,14 @@ public class CategoryMapper {
     public CategoryResponse map(Category category) {
         return CategoryResponse.builder()
                 .id(category.getId())
-                .name(category.getName())
+                .name(category.getName().toString())
                 .build();
     }
 
     public Category map(String categoryName) {
-        Optional<Category> optionalCategory = categoryRepository.findByName(categoryName);
+        Optional<Category> optionalCategory = categoryRepository.findByName(ECategory.valueOf(categoryName));
         if (optionalCategory.isEmpty()) {
-            throw new EntityNotFoundException("category", "name", categoryName);
+            throw new EntityNotFoundException(String.format("Categoria não %s encontrada.", categoryName));
         }
         return optionalCategory.get();
     }

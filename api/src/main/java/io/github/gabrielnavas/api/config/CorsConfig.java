@@ -13,26 +13,23 @@ import java.util.Arrays;
 public class CorsConfig {
 
     @Value("${application.cors.urls}")
-    private String[] frontEndUrls;
+    private String[] allowedOrigins;
 
     @Value("${application.cors.allowed-methods}")
     private String[] allowedMethods;
 
-
     @Value("${application.cors.allowed-headers}")
     private String[] allowedHeaders;
-
 
     @Bean
     public CorsFilter corsFilter() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.stream(frontEndUrls).toList());
+        config.setAllowedOrigins(Arrays.stream(allowedOrigins).toList());
         config.setAllowedHeaders(Arrays.stream(allowedHeaders).toList());
         config.setAllowedMethods(Arrays.stream(allowedMethods).toList());
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
-
     }
 }

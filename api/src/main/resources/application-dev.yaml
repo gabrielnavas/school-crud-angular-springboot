@@ -15,10 +15,15 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      days-expiration: 7 # one day
+
   cors:
     urls: http://localhost:4200
     allowed-methods: POST,GET,PATCH,DELETE,OPTIONS
-    allowed-headers: Origin,Content-Type,Accept,Authorization
+    allowed-headers: Origin,Content-Type,Accept,Authorization,Cache-Control
 
 server:
   port: 8088

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Course } from '../model/course';
 import { HttpClient } from '@angular/common/http';
-import { delay, first, Observable, tap } from 'rxjs';
+import { first, Observable } from 'rxjs';
 import { CourseRequest } from './requests/course-request';
 import { CoursePageResponse } from './responses/course-page-response';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

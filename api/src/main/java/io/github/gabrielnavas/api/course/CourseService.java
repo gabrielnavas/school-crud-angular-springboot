@@ -2,7 +2,6 @@ package io.github.gabrielnavas.api.course;
 
 import io.github.gabrielnavas.api.category.Category;
 import io.github.gabrielnavas.api.category.CategoryRepository;
-import io.github.gabrielnavas.api.exception.EntityNotFoundButShouldBeException;
 import io.github.gabrielnavas.api.exception.EntityNotFoundException;
 import io.github.gabrielnavas.api.lesson.Lesson;
 import io.github.gabrielnavas.api.lesson.LessonMapper;
@@ -34,13 +33,14 @@ public class CourseService {
     public void partialUpdate(UUID courseId, CourseRequest request) {
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
         if (optionalCourse.isEmpty()) {
-            throw new EntityNotFoundException("course", "id", courseId.toString());
+            throw new EntityNotFoundException(
+                    String.format("Curso não encontrado quando o valor de do ID for %s", courseId)
+            );
         }
 
         Optional<Category> optionalCategory = categoryRepository.findById(request.categoryId());
         if (optionalCategory.isEmpty()) {
-            final List<Category> categories = categoryRepository.findAll();
-            throw new EntityNotFoundButShouldBeException("category", "id", request.categoryId().toString(), categories.stream().map(Category::getName).toList());
+            throw new EntityNotFoundException("Categoria não encontrada.");
         }
 
         Course course = optionalCourse.get();
@@ -61,8 +61,7 @@ public class CourseService {
     public CourseResponse save(CourseRequest request) {
         Optional<Category> optionalCategory = categoryRepository.findById(request.categoryId());
         if (optionalCategory.isEmpty()) {
-            final List<Category> categories = categoryRepository.findAll();
-            throw new EntityNotFoundButShouldBeException("category", "id", request.categoryId().toString(), categories.stream().map(Category::getName).toList());
+            throw new EntityNotFoundException("Categoria não encontrada.");
         }
 
         Course course = courseMapper.map(request);
@@ -78,7 +77,7 @@ public class CourseService {
     public CourseResponse get(UUID courseId) {
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
         if (optionalCourse.isEmpty()) {
-            throw new EntityNotFoundException("course", "id", courseId.toString());
+            throw new EntityNotFoundException(String.format("Curso não encontrado quando o valor de do ID for %s.", courseId));
         }
 
         Course course = optionalCourse.get();
@@ -89,7 +88,7 @@ public class CourseService {
     public void delete(UUID courseId) {
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
         if (optionalCourse.isEmpty()) {
-            throw new EntityNotFoundException("course", "id", courseId.toString());
+            throw new EntityNotFoundException(String.format("Curso não encontrado quando o valor de do ID for %s.", courseId));
         }
 
         courseRepository.deleteById(courseId);
