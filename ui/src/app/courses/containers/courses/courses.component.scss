@@ -1,0 +1,26 @@
+mat-card {
+  display: flex;
+  align-items: center;
+  padding: 1.05rem
+}
+
+mat-card-title {
+  width: 100%;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+mat-toolbar span {
+  margin-right: 1.02rem;
+}
+
+app-courses-list {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}

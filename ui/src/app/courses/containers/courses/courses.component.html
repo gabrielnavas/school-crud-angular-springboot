@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-card-title>
+    <mat-toolbar color="primary">
+      <span>Cursos disponíveis</span>
+      <mat-icon fontIcon="school"></mat-icon>
+    </mat-toolbar>
+  </mat-card-title>
+  <mat-card-content>
+    <app-courses-list (onClickSave)="onClickSave()" (onClickEdit)="onClickEdit($event)"
+      (onClickDelete)="onClickDelete($event)" [courses]="courses" [isLoadingCourses]="isLoadingCourses">
+    </app-courses-list>
+
+    <mat-paginator [pageSizeOptions]="sizeOptions" [pageIndex]="pageIndex"
+      [pageSize]="pageSize" [length]="totalElements" (page)="refresh($event)" showFirstLastButtons
+      aria-label="Select page">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>
