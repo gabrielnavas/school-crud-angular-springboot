@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Course } from '../../model/course';
 import { CoursesService } from '../../services/courses.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,7 +14,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
   templateUrl: './courses.component.html',
   styleUrl: './courses.component.scss'
 })
-export class CoursesComponent implements OnInit {
+export class CoursesComponent implements AfterViewInit {
   courses: Course[] = []
   isLoadingCourses = false;
 
@@ -36,7 +36,7 @@ export class CoursesComponent implements OnInit {
     private readonly snack: MatSnackBar,
   ) { }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.initTitle();
     this.refresh();
     this.detectChangesRef.detectChanges();

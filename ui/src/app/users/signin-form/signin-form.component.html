@@ -1,1 +1,45 @@
-<p>signin-form works!</p>
+<div class="container">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-toolbar color="primary">
+        <mat-card-title>Realizar o login</mat-card-title>
+        <mat-card-subtitle>Faça o login para acessar a plataforma</mat-card-subtitle>
+      </mat-toolbar>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form">
+        <mat-form-field>
+          <mat-label>E-mail</mat-label>
+          <input matInput placeholder="mario@email.com" type="email" formControlName="email" minlength="2" maxlength="100">
+          @if (form.get('email')?.invalid) {
+          <mat-error>
+            {{ formUtilsService.getErrorMessage(form, 'email') }}
+          </mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Senha</mat-label>
+          <input #passwordInput [type]="passwordHidden ? 'text' : 'password'" matInput placeholder="********"
+            formControlName="password" minlength="8" maxlength="100">
+          <mat-icon (click)="togglePasswordHidden()" matSuffix>{{ 
+              passwordHidden 
+              ? 'visibility_off' 
+              : 'visibility'
+            }}</mat-icon>
+          @if (form.get('passwordConfirmation')?.invalid) {
+            <mat-error>
+              {{ formUtilsService.getErrorMessage(form, 'password') }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" matTooltip="'Enter' para logar"
+        (click)="onClickSignin()">Logar</button>
+      <button mat-stroked-button style="margin-left: 1.05rem;" matTooltip="'ESC' para cancelar" (click)="onClickMoveToSignup()">
+        Ainda não tenho uma conta...
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

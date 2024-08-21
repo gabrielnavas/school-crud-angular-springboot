@@ -6,7 +6,7 @@ import { SigninFormComponent } from './signin-form/signin-form.component';
 const routes: Routes = [{
   path: '',
   pathMatch: 'full',
-  redirectTo: 'signup',
+  redirectTo: 'signin',
 }, {
   path: 'signup',
   component: SignupFormComponent,

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { FormUtilsService } from '../../shared/form/form-utils.service';
@@ -35,13 +35,14 @@ export class SignupFormComponent implements OnInit {
   }
 
   onClickSignup() {
-    console.log(this.form.value);
     const password = this.form.value.password
     const passwordConfirmation = this.form.value.passwordConfirmation
 
     if (password !== passwordConfirmation) {
       this.snack.open('Senha está diferente da confirmação de senha.');
       this.input.nativeElement.focus();
+    } else if(this.form.invalid) {
+      this.formUtilsService.validateAllFormFields(this.form)
     } else {
       this.usersService.signup({
         firstname: this.form.value.firstname,
@@ -53,7 +54,7 @@ export class SignupFormComponent implements OnInit {
       })
         .subscribe({
           next: () => {
-            this.snack.open("Cadastrado com sucesso!");
+            this.snack.open("Cadastrado com sucesso. Faça o login!");
             this.onClickMoveToSignin();
           },
           error: err => {
@@ -102,5 +103,10 @@ export class SignupFormComponent implements OnInit {
       ]],
       dateOfBirth: ['', [Validators.required]],
     });
+  }
+
+  @HostListener('document:keydown.enter', ['$event'])
+  private handleEscKey(event: KeyboardEvent) {
+    this.onClickSignup();
   }
 }

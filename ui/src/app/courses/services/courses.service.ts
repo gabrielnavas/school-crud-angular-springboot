@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Course } from '../model/course';
 import { HttpClient } from '@angular/common/http';
-import { first, Observable } from 'rxjs';
+import { first, Observable, of } from 'rxjs';
 import { CourseRequest } from './requests/course-request';
 import { CoursePageResponse } from './responses/course-page-response';
 import { environment } from '../../../environments/environment';
+import { TokenStorageService } from '../../shared/services/token-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class CoursesService {
   private readonly API = environment.apiUrl + "/courses"
 
   constructor(
-    private http: HttpClient,
+    private readonly http: HttpClient,
+    private readonly tokenStorageService: TokenStorageService,
   ) { }
 
   save(request: CourseRequest): Observable<void> {
@@ -37,9 +39,17 @@ export class CoursesService {
   }
 
   list(page: number = 0, size: number = 10): Observable<CoursePageResponse> {
+    const token = this.tokenStorageService.token;
+    if(!token) {
+      return of({} as CoursePageResponse);
+    }
+    
     const url = `${this.API}?page=${page}&size=${size}`;
-    return this.http.get<CoursePageResponse>(url)
-      .pipe(
+    return this.http.get<CoursePageResponse>(url, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).pipe(
         first(),
       );
   }
