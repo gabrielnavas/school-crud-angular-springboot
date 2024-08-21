@@ -1,11 +1,9 @@
 package io.github.gabrielnavas.api.config;
 
 import io.github.gabrielnavas.api.security.JwtFilterService;
-import io.github.gabrielnavas.api.user.model.ERole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -27,8 +25,7 @@ public class SecurityFilterChainConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(Customizer.withDefaults())
+        http.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(
@@ -49,10 +46,6 @@ public class SecurityFilterChainConfig {
                                 "/auth/signup",
                                 "/auth/signin"
                         )
-                        .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/protected/admin-role")
-                        .hasAnyAuthority(ERole.ADMIN.name(), ERole.MANAGER.name(), ERole.STUDENT.name())
-                        .requestMatchers(HttpMethod.GET, "/api/v1/protected/no-role")
                         .permitAll()
                         .anyRequest()
                         .authenticated()

@@ -23,6 +23,7 @@ export class CourseFormComponent implements OnInit, AfterViewInit {
   form!: FormGroup;
 
   categories: Category[] = [];
+  isLoadingCategories = false;
 
   @ViewChild('nameInput') nameInput!: ElementRef<HTMLInputElement>;
 
@@ -40,7 +41,8 @@ export class CourseFormComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    this.initTitle()
+    this.initTitle();
+    this.loadCategories();
     this.initForm();
   }
 
@@ -68,9 +70,9 @@ export class CourseFormComponent implements OnInit, AfterViewInit {
 
   
   includeLessonForm() {
-    const lessonsForms = <UntypedFormArray>this.form.get('lessons');
-    const emptyLesson = this.createLesson();
-    lessonsForms.push(emptyLesson);
+        const lessonsForms = <UntypedFormArray>this.form.get('lessons');
+        const emptyLesson = this.createLesson();
+        lessonsForms.push(emptyLesson);
   }
 
   removeByIndexLessonForm(index: number) {
@@ -150,14 +152,22 @@ export class CourseFormComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private initForm() {
-    const course = this.route.snapshot.data['course'] as Course;
-
+  private loadCategories(): void {
+    this.isLoadingCategories = true;
     this.categoryService.list()
     .subscribe({
-      next: categories => this.categories = categories
+      next: categories => {
+        this.categories = categories
+        this.isLoadingCategories = false;
+      }
     });
+  }
 
+  private initForm() {
+    const course = this.route.snapshot.data['course'] as Course;
+    if(!course) {
+      return 
+    }
     this.form = this.formBuilder.group({
       id: [course.id,],
       name: [course.name, [Validators.required,
@@ -190,7 +200,7 @@ export class CourseFormComponent implements OnInit, AfterViewInit {
     this.showModalMessage('Atenção!', 'Não foi possível criar um novo curso.')
   }
 
-  @HostListener('document:keydown.enter', ['$event'])
+  @HostListener('document:keydown.alt.s', ['$event'])
   private handleEnterKey(event: KeyboardEvent) {
     this.onSave();
   }

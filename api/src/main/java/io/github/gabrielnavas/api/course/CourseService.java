@@ -6,11 +6,14 @@ import io.github.gabrielnavas.api.exception.EntityNotFoundException;
 import io.github.gabrielnavas.api.lesson.Lesson;
 import io.github.gabrielnavas.api.lesson.LessonMapper;
 import io.github.gabrielnavas.api.lesson.LessonRepository;
+import io.github.gabrielnavas.api.user.model.User;
+import io.github.gabrielnavas.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,7 @@ public class CourseService {
     private final LessonRepository lessonRepository;
     private final LessonMapper lessonMapper;
     private final CourseMapper courseMapper;
+    private final UserRepository userRepository;
 
     @Transactional
     public void partialUpdate(UUID courseId, CourseRequest request) {
@@ -58,13 +62,16 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseResponse save(CourseRequest request) {
+    public CourseResponse save(CourseRequest request, Authentication connectedUser) {
         Optional<Category> optionalCategory = categoryRepository.findById(request.categoryId());
         if (optionalCategory.isEmpty()) {
             throw new EntityNotFoundException("Categoria não encontrada.");
         }
 
+        User user = (User) connectedUser.getPrincipal();
+
         Course course = courseMapper.map(request);
+        course.setOwner(user);
         course.setCreatedAt(LocalDateTime.now());
         course.setCategory(optionalCategory.get());
         course.addLessons(request.lessons().stream().map(lessonMapper::map).toList());

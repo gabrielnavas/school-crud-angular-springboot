@@ -21,23 +21,20 @@ public class InitialDataCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        addCategories();
         addRoles();
         addUserAdmin();
     }
 
     public void addUserAdmin() {
-        System.out.println("[ * ] STARTED ADD ADMIN USER.");
         userService.saveUserAdmin();
-        System.out.println("[ * ] ENDED ADDED ADMIN USER.");
     }
 
     public void addRoles() {
-        System.out.println("[ * ] STARTED VERIFYING ROLES.");
         roleService.saveInitialRoles();
-        System.out.println("[ * ] ENDED VERIFYING ROLES.");
     }
 
-    private void addCoursesCategories() {
+    private void addCategories() {
         Stream.of(ECategory.FRONT_END, ECategory.BACK_END)
                 .filter(eCategory -> categoryRepository.findByName(eCategory).isEmpty())
                 .forEach(categoryName -> categoryRepository.save(

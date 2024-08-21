@@ -5,7 +5,7 @@ import { ErrorDialogComponent } from './components/error-dialog/error-dialog.com
 
 import { CategoryPipe } from './pipes/category.pipe';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
-import { CategoryUppercasePipe } from './pipes/category-uppercase.pipe';
+import { CapitalizeCategoryPipe } from './pipes/capitalize-category.pipe';
 
 
 @NgModule({
@@ -13,7 +13,7 @@ import { CategoryUppercasePipe } from './pipes/category-uppercase.pipe';
     ErrorDialogComponent,
     CategoryPipe,
     ConfirmDialogComponent,
-    CategoryUppercasePipe,
+    CapitalizeCategoryPipe,
   ],
   imports: [
     CommonModule,
@@ -22,7 +22,7 @@ import { CategoryUppercasePipe } from './pipes/category-uppercase.pipe';
   exports: [
     MaterialModule,
     CategoryPipe,
-    CategoryUppercasePipe,
+    CapitalizeCategoryPipe,
   ]
 })
 export class SharedModule { }

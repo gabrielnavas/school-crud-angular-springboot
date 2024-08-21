@@ -5,7 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormUtilsService } from '../../shared/form/form-utils.service';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { TokenStorageService } from '../../shared/services/token-storage.service';
+import { StorageService } from '../../shared/services/storage.service';
+import { StorageKey } from '../../shared/services/storage-key';
 
 @Component({
   selector: 'app-signin-form',
@@ -26,7 +27,7 @@ export class SigninFormComponent {
     private readonly snack: MatSnackBar,
     private readonly usersService: UsersService,
     private readonly router: Router,
-    private readonly tokenStorage: TokenStorageService,
+    private readonly storageService: StorageService,
   ) { }
 
   ngOnInit(): void {
@@ -43,11 +44,11 @@ export class SigninFormComponent {
         password: this.form.value.password,
       }).subscribe({
         next: response => {
-          this.tokenStorage.token = response.token;
+          this.storageService.setValue(StorageKey.TOKEN, response.token);
           this.router.navigate(['/courses']);
-          this.snack.open("Bem-vindo(a) novamente!", 'X', { 
-            duration: 5000, 
-            horizontalPosition: 'right', verticalPosition: 'top' 
+          this.snack.open("Bem-vindo(a) novamente!", 'X', {
+            duration: 5000,
+            horizontalPosition: 'right', verticalPosition: 'top'
           })
         },
         error: err => {

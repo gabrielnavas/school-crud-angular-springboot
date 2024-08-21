@@ -1,6 +1,7 @@
 package io.github.gabrielnavas.api.user.model;
 
 
+import io.github.gabrielnavas.api.course.Course;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,6 +59,9 @@ public class User implements UserDetails, Principal {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<UserRole> userRoles = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
+    private List<Course> courses = new ArrayList<>();
 
     public void addRoles(List<Role> roles) {
         roles.forEach(role -> userRoles.add(UserRole.builder()

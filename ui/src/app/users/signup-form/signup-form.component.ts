@@ -41,7 +41,7 @@ export class SignupFormComponent implements OnInit {
     if (password !== passwordConfirmation) {
       this.snack.open('Senha está diferente da confirmação de senha.');
       this.input.nativeElement.focus();
-    } else if(this.form.invalid) {
+    } else if (this.form.invalid) {
       this.formUtilsService.validateAllFormFields(this.form)
     } else {
       this.usersService.signup({
@@ -51,16 +51,15 @@ export class SignupFormComponent implements OnInit {
         email: this.form.value.email,
         password: this.form.value.password,
         passwordConfirmation: this.form.value.passwordConfirmation,
+      }).subscribe({
+        next: () => {
+          this.snack.open("Cadastrado com sucesso. Faça o login!");
+          this.onClickMoveToSignin();
+        },
+        error: err => {
+          this.snack.open(err.error.message)
+        }
       })
-        .subscribe({
-          next: () => {
-            this.snack.open("Cadastrado com sucesso. Faça o login!");
-            this.onClickMoveToSignin();
-          },
-          error: err => {
-            this.snack.open(err.error.message)
-          }
-        })
     }
   }
 

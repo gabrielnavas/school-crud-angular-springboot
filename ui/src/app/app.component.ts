@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TokenStorageService } from './shared/services/token-storage.service';
+import { StorageService } from './shared/services/storage.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,13 +11,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AppComponent {
 
   constructor(
-    private readonly tokenStorageService: TokenStorageService,
+    private readonly storageService: StorageService,
     private readonly router: Router,
     private readonly snack: MatSnackBar,
   ) { }
 
   logout() {
-    this.tokenStorageService.logout();
+    this.storageService.clear();
     this.router.navigate(['']);
     this.snack.open("Até mais!", 'X', { 
       duration: 5000, 

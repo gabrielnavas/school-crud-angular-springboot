@@ -13,26 +13,34 @@
           <mat-label>Nome</mat-label>
           <input #nameInput matInput placeholder="Ex. Spring Boot" formControlName="name" minlength="2" maxlength="100">
           @if (form.get('name')?.invalid) {
-            <mat-error>
-              {{ formUtilsService.getErrorMessage(form, 'name') }}
-            </mat-error>
+          <mat-error>
+            {{ formUtilsService.getErrorMessage(form, 'name') }}
+          </mat-error>
           }
           <mat-hint align='end'>{{ form.value.name!.length }}/{{ nameInput.maxLength }}</mat-hint>
         </mat-form-field>
 
+        @if(isLoadingCategories) {
+        <span class="loading-categories">
+          <mat-spinner diameter="50"></mat-spinner>
+          Carregando as categorias. Aguarde!
+        </span>
+        } @else {
         <mat-form-field>
           <mat-label>Categoria</mat-label>
           <mat-select formControlName="category">
             @for (category of categories; track category.id) {
-              <mat-option value="{{ category.id }}">{{ category.name | categoryUppercase }}</mat-option>
+            <mat-option value="{{ category.id }}">{{ category.name | capitalizeCategory }}</mat-option>
             }
           </mat-select>
           @if (form.get('category')?.touched && form.get('category')?.invalid) {
-            <mat-error>
-              {{ formUtilsService.getErrorMessage(form, 'category') }}
-            </mat-error>
+          <mat-error>
+            {{ formUtilsService.getErrorMessage(form, 'category') }}
+          </mat-error>
           }
         </mat-form-field>
+
+        }
 
         <mat-toolbar class="lissons-container">
           <span>Aulas</span>
@@ -43,9 +51,9 @@
         </mat-toolbar>
 
         @if (formUtilsService.isFormArrayRequired(form, 'lessons')) {
-          <mat-error>
-            {{ formUtilsService.getErrorMessage(form, 'lessons') }}
-          </mat-error>
+        <mat-error>
+          {{ formUtilsService.getErrorMessage(form, 'lessons') }}
+        </mat-error>
         }
 
         @for (lesson of lessonsFormArray; track i; let i = $index;) {
@@ -57,9 +65,9 @@
                   <mat-label>Nome</mat-label>
                   <input matInput placeholder="Ex. Primeira aula" formControlName="name" #name />
                   @if (lessonsFormArray[i].get('name')?.touched && lessonsFormArray[i].get('name')?.invalid) {
-                    <mat-error>
-                      {{ formUtilsService.getErrorMessageArray(form, 'lessons', 'name', i) }}
-                    </mat-error>
+                  <mat-error>
+                    {{ formUtilsService.getErrorMessageArray(form, 'lessons', 'name', i) }}
+                  </mat-error>
                   }
                 </mat-form-field>
               </td>
@@ -68,10 +76,11 @@
                   <mat-label>URL do Youtube</mat-label>
                   <span matPrefix>https://youtube.br/</span>
                   <input matInput placeholder="Ex. abc123" formControlName="youtubeUrl" #youtubeUrl />
-                  @if (lessonsFormArray[i].get('youtubeUrl')?.touched && lessonsFormArray[i].get('youtubeUrl')?.invalid) {
-                    <mat-error>
-                      {{ formUtilsService.getErrorMessageArray(form, 'lessons', 'youtubeUrl', i) }}
-                    </mat-error>
+                  @if (lessonsFormArray[i].get('youtubeUrl')?.touched && lessonsFormArray[i].get('youtubeUrl')?.invalid)
+                  {
+                  <mat-error>
+                    {{ formUtilsService.getErrorMessageArray(form, 'lessons', 'youtubeUrl', i) }}
+                  </mat-error>
                   }
                 </mat-form-field>
               </td>
@@ -88,8 +97,17 @@
       </form>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="onSubmit()" matTooltip="'Enter' para salvar esse curso">{{
-        form.value.id ? 'Atualizar' : 'Salvar' }}</button>
+      <button 
+        mat-raised-button 
+        color="primary" 
+        (click)="onSubmit()" 
+        matTooltip='{{ form.value.id 
+        ? "\' Alt + S\' para   alterar esse curso" 
+        : "\'Alt + S\' para salvar esse curso" }}'>
+        {{ form.value.id 
+          ? 'Atualizar' 
+          : 'Salvar' }}
+      </button>
       <button mat-stroked-button style="margin-left: 1.05rem;" (click)="onClickCancel()"
         matTooltip="'ESC' para cancelar">Cancelar</button>
     </mat-card-actions>

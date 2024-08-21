@@ -23,7 +23,7 @@ application:
   cors:
     urls: http://localhost:4200
     allowed-methods: POST,GET,PATCH,DELETE,OPTIONS
-    allowed-headers: Origin,Content-Type,Accept,Authorization,Cache-Control
+    allowed-headers: Origin,Content-Type,Accept,Authorization
 
 server:
   port: 8088

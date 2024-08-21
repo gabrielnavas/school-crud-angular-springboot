@@ -2,6 +2,7 @@ package io.github.gabrielnavas.api.course;
 
 import io.github.gabrielnavas.api.category.Category;
 import io.github.gabrielnavas.api.lesson.Lesson;
+import io.github.gabrielnavas.api.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -44,6 +45,10 @@ public class Course {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lesson> lessons = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
 
     public void addLesson(Lesson lesson) {
         lessons.add(lesson);

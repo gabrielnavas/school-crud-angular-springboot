@@ -7,3 +7,7 @@ export interface Course {
   category: Category;
   lessons: Lesson[];
 }
+
+export function createEmptyCourse(): Course {
+  return { id: '', category: { id: '', name: '' }, name: '', lessons: [] }
+}

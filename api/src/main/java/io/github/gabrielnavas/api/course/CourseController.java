@@ -3,6 +3,7 @@ package io.github.gabrielnavas.api.course;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -28,12 +29,13 @@ public class CourseController {
     ) {
         return courseService.get(courseId);
     }
-
+    
     @PostMapping
     public CourseResponse save(
-            @RequestBody @Valid CourseRequest request
+            @RequestBody @Valid CourseRequest request,
+            Authentication connectedUser
     ) {
-        return courseService.save(request);
+        return courseService.save(request, connectedUser);
     }
 
     @PatchMapping("/{course-id}")
